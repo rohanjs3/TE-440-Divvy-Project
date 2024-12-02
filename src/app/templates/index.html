@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bike Usage Chatbot</title>
+    <script>
+        async function sendQuery() {
+            const userQuery = document.getElementById("user-query").value;
+            const responseBox = document.getElementById("response");
+            responseBox.innerText = "Loading...";
+
+            const response = await fetch("/query", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ user_query: userQuery })
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                responseBox.innerText = data.response;
+            } else {
+                responseBox.innerText = `Error: ${data.error}`;
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <h1>Bike Usage Chatbot</h1>
+    <p>Ask questions about the analyzed bike dataset:</p>
+    <input type="text" id="user-query" placeholder="Type your query here" style="width: 60%;" />
+    <button onclick="sendQuery()">Submit</button>
+    <p><strong>Response:</strong></p>
+    <div id="response" style="border: 1px solid #ccc; padding: 10px; width: 60%;"></div>
+</body>
+
+</html>
